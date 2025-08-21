@@ -2,8 +2,8 @@ return {
     display = {
         style = 'inline',               -- one of inline, highlight
         glyph = '',                   -- glyph for inline style
+        inactive = true,                -- show in inactive windows
     },
-    inactive = true,                    -- show in inactive window
     modes = {
         n = {
             cursor = true,              -- show for item under cursor
