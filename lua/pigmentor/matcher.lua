@@ -11,7 +11,7 @@ local matchers = {
 
 --- Find all colors in the file.
 --- @param config table
---- @param args table
+--- @param buf integer
 --- @return table the colors found, as a table of tables
 function M.find_colors(config, buf)
     if vim.bo[buf].buftype ~= '' then return {} end  -- only support 'normal' buffers
@@ -21,8 +21,11 @@ function M.find_colors(config, buf)
 
     -- Check whether buffer is active and we want to find colors.
     local is_active = buf == vim.api.nvim_get_current_buf()
-    if not config.display.inactive and not is_active then return {} end
+    if not config.display.inactive and not is_active then
+        return {}  -- don't search for colors in inactive buffer
+    end
 
+    -- Get visible windows.
     local curr_tab_id = vim.api.nvim_get_current_tabpage()
     local wins = vim.api.nvim_tabpage_list_wins(curr_tab_id)
 
@@ -35,7 +38,7 @@ function M.find_colors(config, buf)
                 row_last = wininfo.botline,                                         -- 1-indexed
                 col_first = wininfo.leftcol and wininfo.leftcol + 1 or 1,           -- 1-indexed
             }
-            rect.col_last = rect.col_first + wininfo.width - wininfo.textoff      -- 1-indexed
+            rect.col_last = rect.col_first + wininfo.width - wininfo.textoff        -- 1-indexed
             local new_matches = M.find_colors_in_range(buf, win, rect, mode_config)
             for k, v in pairs(new_matches) do
                 if matches[k] == nil then
