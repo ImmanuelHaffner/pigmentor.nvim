@@ -1,7 +1,7 @@
 local M = { }
 
 local autocmd = require'pigmentor.autocmd'
-local matcher = require'pigmentor.matcher'
+local finder = require'pigmentor.finder'
 local ui = require'pigmentor.ui'
 
 local display_style_cycler = {
@@ -19,7 +19,7 @@ end
 --- @param buf integer buffer ID
 function M.refresh_buffer(buf)
     -- Get list of matches.
-    local matches = matcher.find_colors(M.config, buf)
+    local matches = finder.find_colors(M, buf)
 
     -- Redraw buffer.
     ui.redraw_buffer(M, buf, matches)

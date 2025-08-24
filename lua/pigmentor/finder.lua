@@ -1,29 +1,23 @@
 local M = { }
 
 local utils = require'pigmentor.utils'
-
-local pat_hex_digit = '[0-9a-fA-F]'
-
-local matchers = {
-    { kind = 'hex_rgba', pattern = '#' .. string.rep(pat_hex_digit, 8) },
-    { kind = 'hex_rgb', pattern = '#' .. string.rep(pat_hex_digit, 6) },
-}
+local matchers = require'pigmentor.colormatchers'
 
 --- Find all colors in the given buffer.  It is important to do this per buffer, not per window.  We later clear all
 --- extmarks in the Pigmentor namespace in this buffer before redrawing.
 --- @param config table
 --- @param buf integer
 --- @return table the colors found, as a table of tables
-function M.find_colors(config, buf)
-    if not config.enabled then return {} end
+function M.find_colors(pigmentor, buf)
+    if not pigmentor.config.enabled then return {} end
     if vim.bo[buf].buftype ~= '' then return {} end  -- only support 'normal' buffers
 
     -- Get the config settings for the current mode.
-    local mode_config = utils.get_mode_config(config, vim.api.nvim_get_mode().mode)
+    local mode_config = utils.get_mode_config(pigmentor.config, vim.api.nvim_get_mode().mode)
 
     -- Check whether buffer is active and we want to find colors.
     local is_active = buf == vim.api.nvim_get_current_buf()
-    if not config.display.inactive and not is_active then
+    if not pigmentor.config.display.inactive and not is_active then
         return {}  -- don't search for colors in inactive buffer
     end
 
@@ -66,11 +60,11 @@ function M.find_colors_in_range(buf, win, rect, mode_config)
 
         while true do
             local s, e
-            local kind
-            for _, matcher in ipairs(matchers) do
+            local matcher_idx
+            for idx, matcher in ipairs(matchers) do
                 s, e = string.find(line, matcher.pattern, col)
                 if s then
-                    kind = matcher.kind
+                    matcher_idx = idx
                     break  -- break on first matcher matching
                 end
             end
@@ -94,7 +88,7 @@ function M.find_colors_in_range(buf, win, rect, mode_config)
                     line = line_num,
                     s = s,
                     e = e,
-                    kind = kind,
+                    idx = matcher_idx,
                 }
             end
 
