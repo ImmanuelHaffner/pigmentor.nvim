@@ -22,7 +22,7 @@ function M.setup(pigmentor)
     })
 
     -- When to refresh all visible buffers.
-    vim.api.nvim_create_autocmd({ 'TabEnter' }, {
+    vim.api.nvim_create_autocmd({ 'VimEnter', 'SessionLoadPost', 'TabEnter' }, {
         group = pigmentor.augroup,
         callback = function(ev)
             pigmentor.refresh_visible_buffers()

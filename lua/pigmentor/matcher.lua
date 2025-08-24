@@ -9,11 +9,13 @@ local matchers = {
     { kind = 'hex_rgb', pattern = '#' .. string.rep(pat_hex_digit, 6) },
 }
 
---- Find all colors in the file.
+--- Find all colors in the given buffer.  It is important to do this per buffer, not per window.  We later clear all
+--- extmarks in the Pigmentor namespace in this buffer before redrawing.
 --- @param config table
 --- @param buf integer
 --- @return table the colors found, as a table of tables
 function M.find_colors(config, buf)
+    if not config.enabled then return {} end
     if vim.bo[buf].buftype ~= '' then return {} end  -- only support 'normal' buffers
 
     -- Get the config settings for the current mode.

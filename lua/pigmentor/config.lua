@@ -1,8 +1,17 @@
 return {
+    enabled = true,                     -- whether the plugin is active
     display = {
-        style = 'inline',               -- one of inline, highlight
-        glyph = '',                   -- glyph for inline style
         inactive = true,                -- show in inactive windows
+        style = 'inline',               -- one of inline, highlight
+        inline = {
+            text_post = '',               -- text after
+        },
+        highlight = {
+            padding = {
+                left = 1,
+                right = 1,
+            },
+        },
     },
     modes = {
         n = {
