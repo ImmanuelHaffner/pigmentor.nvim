@@ -1,4 +1,3 @@
-local hex_digit = '[0-9a-fA-F]'
 local decimal = '%d*%.?%d*'
 
 local function round(n) return math.floor(n + .5) end
@@ -8,7 +7,7 @@ local M = {
     {
         -- Hexadecimal RGBA (8 digits)
         kind = 'hex_rgba',
-        pattern = '#' .. string.rep(hex_digit, 8),
+        pattern = '#' .. string.rep('%x', 8),
         to_vim_color = function(str)
             return str:sub(1, 7)
         end,
@@ -16,7 +15,7 @@ local M = {
     {
         -- Hexadecimal RGB (6 digits)
         kind = 'hex_rgb',
-        pattern = '#' .. string.rep(hex_digit, 6),
+        pattern = '#' .. string.rep('%x', 6),
         to_vim_color = function(str)
             return str:sub(1, 7)
         end,
@@ -24,7 +23,7 @@ local M = {
     {
         -- Short hexadecimal RGB (3 digits)
         kind = 'hex_rgb_short',
-        pattern = '#' .. string.rep(hex_digit, 3),
+        pattern = '#' .. string.rep('%x', 3),
         to_vim_color = function(str)
             local R = str:sub(2, 2)
             local G = str:sub(3, 3)
@@ -35,8 +34,10 @@ local M = {
     {
         -- CSS rgba
         kind = 'css_rgba',
-        pattern = 'rgba%(' ..
-                  '%s*(' .. decimal .. ')%s*,%s*(' .. decimal .. ')%s*,%s*(' .. decimal .. ')%s*,%s*(' .. decimal .. ')%s*%)',
+        pattern = 'rgba%(%s*(' .. decimal .. ')%s*,' ..
+                        '%s*(' .. decimal .. ')%s*,' ..
+                        '%s*(' .. decimal .. ')%s*,' ..
+                        '%s*(' .. decimal .. ')%s*%)',
         to_vim_color = function(str)
             local r, g, b = str:match('rgba%(' .. '%s*(' .. decimal .. ')%s*,%s*(' .. decimal .. ')%s*,%s*(' .. decimal .. ')%s*,%s*(' .. decimal .. ')%s*%)')
             local R, G, B = round(255 * r), round(255 * g), round(255 * b)
