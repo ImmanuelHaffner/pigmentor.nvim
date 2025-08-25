@@ -24,7 +24,7 @@ function M.create_highlight_group(buf, match, hl_number)
     -- Create new highlight group.  The name includes buffer ID and highligh group counter for scoping.
     local hl_group = ('PigmentorHiBuf%dColor%d'):format(buf, hl_number)
     local matcher = matchers[match.idx]
-    local vim_color = matcher.to_vim_color(match.text)
+    local vim_color = matcher:to_vim_color(match.text)
     vim.api.nvim_set_hl(0, hl_group, {
         fg = vim_color, bg = hl_normal.bg,
     })

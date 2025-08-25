@@ -3,9 +3,20 @@ local M = { }
 local utils = require'pigmentor.utils'
 local matchers = require'pigmentor.colormatchers'
 
+local function find_strict(str, pattern, col)
+    col = col or 1
+    local s, e = str:find(pattern .. '$', col)
+    if s == nil then
+        s, e = str:find(pattern .. '%W', col)
+        if e then e = e - 1 end
+    end
+    if s then return s, e end
+    return nil, nil
+end
+
 --- Find all colors in the given buffer.  It is important to do this per buffer, not per window.  We later clear all
 --- extmarks in the Pigmentor namespace in this buffer before redrawing.
---- @param config table
+--- @param pigmentor table
 --- @param buf integer
 --- @return table the colors found, as a table of tables
 function M.find_colors(pigmentor, buf)
@@ -62,7 +73,7 @@ function M.find_colors_in_range(buf, win, rect, mode_config)
             local s, e
             local matcher_idx
             for idx, matcher in ipairs(matchers) do
-                s, e = string.find(line, matcher.pattern, col)
+                s, e = find_strict(line, matcher.pattern, col)
                 if s then
                     matcher_idx = idx
                     break  -- break on first matcher matching
