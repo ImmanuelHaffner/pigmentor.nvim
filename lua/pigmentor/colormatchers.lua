@@ -108,6 +108,19 @@ local M = {
         end,
     },
     {
+        -- LaTeX definecolor rgb
+        kind = 'latex_definecolor',
+        pattern = '\\definecolor{[%w_]+}{rgb}{' ..
+                  '%s*(' .. decimal .. ')%s*,' ..
+                  '%s*(' .. decimal .. ')%s*,' ..
+                  '%s*(' .. decimal .. ')%s*}',
+        to_vim_color = function(self, str)
+            local r, g, b = str:match(self.pattern)
+            local R, G, B = rgb_rel_to_abs(r, g, b)
+            return ('#%02x%02x%02x'):format(R, G, B)
+        end,
+    },
+    {
         -- LaTeX definecolor HTML
         kind = 'latex_definecolor',
         pattern = '\\definecolor{[%w_]+}{HTML}{(' .. ('%x'):rep(6) .. ')}',
