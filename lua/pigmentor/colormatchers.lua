@@ -45,10 +45,35 @@ local M = {
         end,
     },
     {
+        -- CSS rgba (legacy)
+        kind = 'css_rgba',
+        pattern = 'rgba%(%s*(' .. decimal .. ')%s*,%s*' ..
+                           '(' .. decimal .. ')%s*,%s*' ..
+                           '(' .. decimal .. ')%s*,%s*' ..
+                           '(' .. decimal .. ')%s*%)',
+        to_vim_color = function(self, str)
+            local r, g, b = str:match(self.pattern)
+            local R, G, B = round(255 * r), round(255 * g), round(255 * b)
+            return ('#%02x%02x%02x'):format(R, G, B)
+        end,
+    },
+    {
         -- CSS rgb
         kind = 'css_rgb',
         pattern = 'rgb%(%s*(' .. decimal .. ')%s+' ..
                           '(' .. decimal .. ')%s+' ..
+                          '(' .. decimal .. ')%s*%)',
+        to_vim_color = function(self, str)
+            local r, g, b = str:match(self.pattern)
+            local R, G, B = round(255 * r), round(255 * g), round(255 * b)
+            return ('#%02x%02x%02x'):format(R, G, B)
+        end,
+    },
+    {
+        -- CSS rgb (legacy)
+        kind = 'css_rgb',
+        pattern = 'rgb%(%s*(' .. decimal .. ')%s*,%s*' ..
+                          '(' .. decimal .. ')%s*,%s*' ..
                           '(' .. decimal .. ')%s*%)',
         to_vim_color = function(self, str)
             local r, g, b = str:match(self.pattern)
