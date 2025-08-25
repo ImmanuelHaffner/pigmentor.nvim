@@ -2,6 +2,23 @@ local decimal = '%d*%.?%d*'
 
 local function round(n) return math.floor(n + .5) end
 
+local function clamp(value, min, max)
+    if value < min then return min end
+    if value > max then return max end
+    return value
+end
+
+--- Convert RBG channel relative ratio to absolute value.
+--- @param ratio number
+--- @return integer
+local function channel_rel_to_abs(ratio)
+    return clamp(round(ratio * 255), 0, 255)
+end
+
+local function rgb_rel_to_abs(r, g, b)
+    return channel_rel_to_abs(r), channel_rel_to_abs(g), channel_rel_to_abs(b)
+end
+
 -- Array of known color formats.
 local M = {
     {
@@ -40,7 +57,7 @@ local M = {
                            '(' .. decimal .. ')%s*%)',
         to_vim_color = function(self, str)
             local r, g, b = str:match(self.pattern)
-            local R, G, B = round(255 * r), round(255 * g), round(255 * b)
+            local R, G, B = rgb_rel_to_abs(r, g, b)
             return ('#%02x%02x%02x'):format(R, G, B)
         end,
     },
@@ -53,7 +70,7 @@ local M = {
                            '(' .. decimal .. ')%s*%)',
         to_vim_color = function(self, str)
             local r, g, b = str:match(self.pattern)
-            local R, G, B = round(255 * r), round(255 * g), round(255 * b)
+            local R, G, B = rgb_rel_to_abs(r, g, b)
             return ('#%02x%02x%02x'):format(R, G, B)
         end,
     },
@@ -65,7 +82,7 @@ local M = {
                           '(' .. decimal .. ')%s*%)',
         to_vim_color = function(self, str)
             local r, g, b = str:match(self.pattern)
-            local R, G, B = round(255 * r), round(255 * g), round(255 * b)
+            local R, G, B = rgb_rel_to_abs(r, g, b)
             return ('#%02x%02x%02x'):format(R, G, B)
         end,
     },
@@ -77,7 +94,7 @@ local M = {
                           '(' .. decimal .. ')%s*%)',
         to_vim_color = function(self, str)
             local r, g, b = str:match(self.pattern)
-            local R, G, B = round(255 * r), round(255 * g), round(255 * b)
+            local R, G, B = rgb_rel_to_abs(r, g, b)
             return ('#%02x%02x%02x'):format(R, G, B)
         end,
     },
