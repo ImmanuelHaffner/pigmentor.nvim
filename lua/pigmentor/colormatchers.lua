@@ -81,6 +81,24 @@ local M = {
             return ('#%02x%02x%02x'):format(R, G, B)
         end,
     },
+    {
+        -- LaTeX definecolor RGB
+        kind = 'latex_definecolor',
+        pattern = '\\definecolor{[%w_]+}{RGB}{%s*(%d+)%s*,%s*(%d+)%s*,%s*(%d+)%s*}',
+        to_vim_color = function(self, str)
+            local R, G, B = str:match(self.pattern)
+            return ('#%02x%02x%02x'):format(R, G, B)
+        end,
+    },
+    {
+        -- LaTeX definecolor HTML
+        kind = 'latex_definecolor',
+        pattern = '\\definecolor{[%w_]+}{HTML}{(' .. ('%x'):rep(6) .. ')}',
+        to_vim_color = function(self, str)
+            local hex = str:match(self.pattern)
+            return '#' .. hex
+        end,
+    },
 }
 
 return M
