@@ -31,13 +31,11 @@
 
 ### Examples
 
-![](img/example_inline_simple_dot_post.png)
-![](img/example_inline_half_circle_post.png)
-![](img/example_inline_diamond_pre.png)
-![](img/example_highlight_simple.png)
-![](img/example_highlight_inverted_with_padding.png)
-![](img/example_hybrid_simple.png)
-![](img/example_hybrid_inverted.png)
+![](img/demo_inline_simple_dot_post.png)
+![](img/demo_inline_tulip_inverted.png)
+![](img/demo_highlight_simple.png)
+![](img/demo_highlight_inverted.png)
+![](img/demo_hybrid.png)
 
 ## 📦 Installation
 
