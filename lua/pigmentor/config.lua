@@ -2,9 +2,11 @@ return {
     enabled = true,                     -- whether the plugin is active
     display = {
         inactive = true,                -- show in inactive windows
-        style = 'inline',               -- one of inline, highlight
+        style = 'inline',               -- one of inline, highlight, hybrid
+        priority = 150,                 -- highlight priority, slightly above treesitter
         inline = {
-            text_post = '',               -- text after
+            text_pre = nil,             -- text before
+            text_post = '',           -- text after
         },
         highlight = {
             padding = {

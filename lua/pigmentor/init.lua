@@ -6,7 +6,8 @@ local ui = require'pigmentor.ui'
 
 local display_style_cycler = {
     ['inline'] = 'highlight',
-    ['highlight'] = 'inline',
+    ['highlight'] = 'hybrid',
+    ['hybrid'] = 'inline',
 }
 
 --- Sets the plugin configuration.
