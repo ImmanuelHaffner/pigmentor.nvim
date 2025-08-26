@@ -6,7 +6,7 @@ return {
         priority = 150,                 -- highlight priority, slightly above treesitter
         inline = {
             text_pre = nil,             -- text before
-            text_post = '',           -- text after
+            text_post = '●',            -- text after
         },
         highlight = {
             padding = {
