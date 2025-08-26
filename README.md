@@ -31,13 +31,13 @@
 
 ### Examples
 
-![](img/demo_inline_simple_dot_post.png)
-![](img/demo_inline_half_circle_post.png)
-![](img/demo_inline_diamond_pre.png)
-![](img/demo_highlight_simple.png)
-![](img/demo_highlight_inverted_with_padding.png)
-![](img/demo_hybrid_simple.png)
-![](img/demo_hybrid_inverted.png)
+![](img/example_inline_simple_dot_post.png)
+![](img/example_inline_half_circle_post.png)
+![](img/example_inline_diamond_pre.png)
+![](img/example_highlight_simple.png)
+![](img/example_highlight_inverted_with_padding.png)
+![](img/example_hybrid_simple.png)
+![](img/example_hybrid_inverted.png)
 
 ## 📦 Installation
 
@@ -130,7 +130,7 @@ require'pigmentor'.setup{
 
 Shows color indicators next to color values without replacing the text.
 
-![](img/demo_inline_simple_dot_post.png)
+![](img/example_inline_simple_dot_post.png)
 
 ```lua
 {
@@ -145,7 +145,7 @@ Shows color indicators next to color values without replacing the text.
 
 You can use multiple characters.
 
-![](img/demo_inline_half_circle_post.png)
+![](img/example_inline_half_circle_post.png)
 
 ```lua
 {
@@ -160,7 +160,7 @@ You can use multiple characters.
 
 You can place characters before the text.
 
-![](img/demo_inline_diamond_pre.png)
+![](img/example_inline_diamond_pre.png)
 
 ```lua
 {
@@ -178,7 +178,7 @@ You can place characters before the text.
 
 Replaces the color text background with the actual color.
 
-![](img/demo_highlight_simple.png)
+![](img/example_highlight_simple.png)
 
 ```lua
 {
@@ -198,7 +198,7 @@ Replaces the color text background with the actual color.
 
 You can invert the colors.
 
-![](img/demo_highlight_inverted_with_padding.png)
+![](img/example_highlight_inverted_with_padding.png)
 
 ```lua
 {
@@ -220,7 +220,7 @@ You can invert the colors.
 
 Combines both inline and highlight modes:
 
-![](img/demo_hybrid_simple.png)
+![](img/example_hybrid_simple.png)
 
 ```lua
 {
@@ -241,7 +241,7 @@ Combines both inline and highlight modes:
 }
 ```
 
-![](img/demo_hybrid_inverted.png)
+![](img/example_hybrid_inverted.png)
 
 ```lua
 {
