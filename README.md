@@ -8,7 +8,7 @@
   </p>
   <p>
     <a href="https://github.com/neovim/neovim/releases/tag/v0.9.0"><img src="https://img.shields.io/badge/Neovim-0.9.0+-green.svg?style=flat-square&logo=Neovim&logoColor=white" alt="Neovim minimum version"/></a>
-    <a href="https://github.com/yourusername/pigmentor.nvim/blob/main/LICENSE"><img src="https://img.shields.io/github/license/yourusername/pigmentor.nvim?style=flat-square&logo=MIT&logoColor=white" alt="MIT License"/></a>
+    <a href="https://github.com/ImmanuelHaffner/pigmentor.nvim/blob/main/LICENSE"><img src="https://img.shields.io/github/license/ImmanuelHaffner/pigmentor.nvim?style=flat-square&logo=MIT&logoColor=white" alt="MIT License"/></a>
   </p>
 </div>
 
