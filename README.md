@@ -349,9 +349,20 @@ This project is licensed under the MIT License - see the [LICENSE](LICENSE) file
 
 ## 🙏 Acknowledgments
 
-- Inspired by various color highlighting plugins in the Neovim ecosystem
-- Thanks to the Neovim team for the excellent extmarks API
-- Color format patterns adapted from various CSS and LaTeX specifications
+Thanks to the Neovim team for the excellent extmarks API.
+ 
+ ### Inspiration and Alternatives
+ 
+ - [color-picker.nvim](https://github.com/ziontee113/color-picker.nvim) -
+   A powerful plugin that lets Neovim Users choose & modify colors.
+   This plugin supports RGB, HSL and HEX colors.
+
+
+ - [ccc.nvim](https://github.com/uga-rosa/ccc.nvim) -
+   **C**reate **C**olor **C**ode in neovim.
+   Use the colorful sliders to easily generate any desired color!
+
+
 
 ---
 
