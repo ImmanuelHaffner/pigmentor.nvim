@@ -5,12 +5,17 @@ local matchers = require'pigmentor.colormatchers'
 
 local function find_strict(str, pattern, col)
     col = col or 1
-    local s, e = str:find(pattern .. '$', col)
-    if s == nil then
-        s, e = str:find(pattern .. '%W', col)
-        if e then e = e - 1 end
+    -- vim.print(('find_strict(str="%s", pattern="%s", col=%d)'):format(str, pattern, col))
+    local s, e = str:find(pattern .. '[%s%p%c]', col)
+    if s then
+        e = e - 1
+    else
+        -- consider match at the end of line (EOL)
+        s, e = str:find(pattern .. '$', col)
     end
-    if s then return s, e end
+    if s then
+        return s, e
+    end
     return nil, nil
 end
 
@@ -73,13 +78,14 @@ function M.find_colors_in_range(buf, win, rect, mode_config)
             local s, e
             local matcher_idx
             for idx, matcher in ipairs(matchers) do
-                s, e = find_strict(line, matcher.pattern, col)
-                if s then
+                local new_s, new_e = find_strict(line, matcher.pattern, col)
+                if not s or (new_s and new_s < s) then
                     matcher_idx = idx
-                    break  -- break on first matcher matching
+                    s = new_s
+                    e = new_e
                 end
             end
-            if not s or s >= rect.col_last then break end  -- no matcher matched
+            if s == nil or s >= rect.col_last then break end  -- no matcher matched
             if s then
                 if line_num == cursor_line then  -- current line
                     if s <= cursor_col and cursor_col <= e then  -- cursor on item
@@ -104,7 +110,7 @@ function M.find_colors_in_range(buf, win, rect, mode_config)
             end
 
             ::continue::
-            col = e
+            col = e + 1
         end
     end
 
