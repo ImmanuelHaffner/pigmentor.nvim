@@ -382,7 +382,15 @@ Thanks to the Neovim team for the excellent extmarks API.
    **C**reate **C**olor **C**ode in neovim.
    Use the colorful sliders to easily generate any desired color!
 
+## 🚧 Planned Features
 
+The following features are planned for future releases:
+
+- 📚 **Vim Help Documentation**: Comprehensive help documentation accessible via `:help pigmentor`
+- 🎨 **Extended Color Format Support**:
+  - **HSL/HLS**: `hsl(0, 100%, 50%)`, `hsla(0, 100%, 50%, 0.5)`
+  - **HSV/HSB**: `hsv(0, 100%, 100%)`, `hsva(0, 100%, 100%, 0.5)`
+- ⚡ **Per-Channel Color Manipulation**: Increment/decrement individual color channels using `<Ctrl-a>` and `<Ctrl-x>` respectively
 
 ---
 
