@@ -49,7 +49,7 @@ function M.disable()
 end
 
 function M.enable()
-    M.config.enabled = false
+    M.config.enabled = true
     M.refresh_visible_buffers()
 end
 
