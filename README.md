@@ -174,6 +174,24 @@ You can place characters before the text.
 }
 ```
 
+You can provide a table of strings to `text_pre` and `text_post`.
+The texts will be rendered consecutively with alternating inverting colors.
+With `inverted` you configure whether to start with inverted colors.
+
+![](img/example_inline_inverted_tulip.png)
+
+```lua
+{
+  display = {
+    style = 'inline',
+    inline = {
+      inverted = true,
+      text_post = { '', '', },
+    }
+  }
+}
+```
+
 #### Highlight
 
 Replaces the color text background with the actual color.
