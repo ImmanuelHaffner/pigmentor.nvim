@@ -1,6 +1,5 @@
 local M = { }
 
-local autocmd = require'pigmentor.autocmd'
 local finder = require'pigmentor.finder'
 local ui = require'pigmentor.ui'
 
@@ -75,7 +74,9 @@ function M.setup(opts)
     M.ns = vim.api.nvim_create_namespace'pigmentor.nvim'
 
     -- Setup autocmds.
-    autocmd.setup(M)
+    require'pigmentor.autocmd'.setup(M)
+    -- Create user commands
+    require'pigmentor.user_commands'.setup(M)
 end
 
 return M
