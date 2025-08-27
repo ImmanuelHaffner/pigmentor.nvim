@@ -73,6 +73,8 @@ use {
 Plug 'ImmanuelHaffner/pigmentor.nvim'
 ```
 
+The plugin supports auto-loading with default configuration via `plugin/pigmentor.lua`, requiring no additional setup for basic functionality.
+
 ## ⚙️ Configuration
 
 Pigmentor comes with sensible defaults, but you can customize it to your needs:
