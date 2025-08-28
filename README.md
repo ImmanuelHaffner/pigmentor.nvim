@@ -73,6 +73,8 @@ use {
 Plug 'ImmanuelHaffner/pigmentor.nvim'
 ```
 
+### `vim.pack`
+
 The plugin supports auto-loading with default configuration via `plugin/pigmentor.lua`, requiring no additional setup for basic functionality.
 
 ### Try before using
@@ -82,7 +84,7 @@ Simply clone the repository and run `nvim --clean -u path/to/pigmentor/demo/lazy
 
 ## ⚙️ Configuration
 
-Pigmentor comes with sensible defaults, but you can customize it to your needs:
+Pigmentor comes with sensible defaults, but you can customize it to your needs.
 
 ### Default Configuration
 
@@ -206,7 +208,7 @@ With `inverted` you configure whether to start with inverted colors.
 
 #### Highlight
 
-Replaces the color text background with the actual color.
+Replaces the foreground text color with the actual color.
 
 ![](img/example_highlight_simple.png)
 
@@ -226,7 +228,7 @@ Replaces the color text background with the actual color.
 
 ```
 
-You can invert the colors.
+You can swap foreground and background colors.
 
 ![](img/example_highlight_inverted_with_padding.png)
 
@@ -352,12 +354,12 @@ For large files or when performance is a concern:
 ```lua
 require'pigmentor'.setup{
   display = {
-    inactive = false,  -- Don't highlight inactive windows
-    priority = 100,    -- Tune extmark priority to not interfere with other extmarks
+    inactive = false,   -- Don't highlight inactive windows
+    priority = 100,     -- Tune extmark priority to not interfere with other extmarks
   },
   modes = {
     i = {
-      visible = false, -- Disable in insert mode for performance
+      visible = false,  -- Disable in insert mode for performance
     },
   },
 }
