@@ -1,5 +1,8 @@
 local M = { }
 
+-- Ensure table.unpack is available
+table.unpack = table.unpack or unpack
+
 local finder = require'pigmentor.finder'
 local ui = require'pigmentor.ui'
 
