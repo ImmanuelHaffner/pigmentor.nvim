@@ -2,7 +2,7 @@
 <!-- markdownlint-disable -->
 <br />
 <div align="center">
-  <h1>🎨 pigmentor.nvim</h1>
+  <h1><img src="img/pigmentor.png" style="height: 1.2em; width: auto; vertical-align: middle; border-radius: 15%;"/> pigmentor.nvim</h1>
   <p>
     <strong>Your mentor for dealing with pigments (colors) in Neovim</strong>
   </p>
