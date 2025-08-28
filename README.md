@@ -75,6 +75,11 @@ Plug 'ImmanuelHaffner/pigmentor.nvim'
 
 The plugin supports auto-loading with default configuration via `plugin/pigmentor.lua`, requiring no additional setup for basic functionality.
 
+### Try before using
+
+Pigmentor provides a minimalistic Nvim configuration for demonstrational and testing purposes.
+Simply clone the repository and run `nvim --clean -u path/to/pigmentor/demo/lazy/init.lua`.
+
 ## ⚙️ Configuration
 
 Pigmentor comes with sensible defaults, but you can customize it to your needs:
