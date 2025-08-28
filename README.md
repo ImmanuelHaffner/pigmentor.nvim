@@ -385,16 +385,25 @@ This project is licensed under the MIT License - see the [LICENSE](LICENSE) file
 
 Thanks to the Neovim team for the excellent extmarks API.
  
- ### Inspiration and Alternatives
- 
- - [color-picker.nvim](https://github.com/ziontee113/color-picker.nvim) -
-   A powerful plugin that lets Neovim Users choose & modify colors.
-   This plugin supports RGB, HSL and HEX colors.
+### Inspiration and Alternatives
+
+- [color-picker.nvim](https://github.com/ziontee113/color-picker.nvim) -
+A powerful plugin that lets Neovim Users choose & modify colors.
+This plugin supports RGB, HSL and HEX colors.
 
 
- - [ccc.nvim](https://github.com/uga-rosa/ccc.nvim) -
-   **C**reate **C**olor **C**ode in neovim.
-   Use the colorful sliders to easily generate any desired color!
+- [ccc.nvim](https://github.com/uga-rosa/ccc.nvim) -
+**C**reate **C**olor **C**ode in neovim.
+Use the colorful sliders to easily generate any desired color!
+
+- [mini.hipatterns](https://github.com/nvim-mini/mini.hipatterns) –
+Highlight patterns in text
+
+- [catgoose/nvim-colorizer.lua](https://github.com/catgoose/nvim-colorizer.lua) –
+  A high-performance color highlighter for Neovim which has no external dependencies! 
+  Written in performant Luajit.
+
+
 
 ## 🚧 Planned Features
 
