@@ -84,6 +84,13 @@ Pigmentor comes with sensible defaults, but you can customize it to your needs:
 ```lua
 require'pigmentor'.setup{
   enabled = true,                   -- whether the plugin is active
+  buftypes = {                      -- which buftypes to support
+    '',                             -- normal files
+    'help',
+    'nofile',
+    'nowrite',
+    'quickfix',
+  },
   display = {
     inactive = true,                -- show in inactive windows
     style = 'inline',               -- one of 'inline', 'highlight', 'hybrid'

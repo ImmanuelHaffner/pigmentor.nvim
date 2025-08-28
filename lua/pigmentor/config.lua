@@ -1,5 +1,12 @@
 return {
     enabled = true,                     -- whether the plugin is active
+    buftypes = {                        -- which buftypes to support
+        '',                             -- normal files
+        'help',
+        'nofile',
+        'nowrite',
+        'quickfix',
+    },
     display = {
         inactive = true,                -- show in inactive windows
         style = 'inline',               -- one of inline, highlight, hybrid

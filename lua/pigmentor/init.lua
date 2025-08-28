@@ -16,6 +16,12 @@ local display_style_cycler = {
 --- @param opts table plugin configuration
 function M.load_config(opts)
     M.config = vim.tbl_deep_extend('force', require'pigmentor.config', opts)
+
+    M.internal = { }
+    M.internal.buftypes = { }
+    for _, buftype in ipairs(M.config.buftypes) do
+        M.internal.buftypes[buftype] = true
+    end
 end
 
 --- Refreshes a single buffer.
