@@ -8,11 +8,15 @@ local function clamp(value, min, max)
     return value
 end
 
+local function clamp_8bit_channel(value)
+    return clamp(value, 0, 255)
+end
+
 --- Convert RBG channel relative ratio to absolute value.
 --- @param ratio number
 --- @return integer
 local function channel_rel_to_abs(ratio)
-    return clamp(round(ratio * 255), 0, 255)
+    return clamp_8bit_channel(round(ratio * 255))
 end
 
 local function rgb_rel_to_abs(r, g, b)
@@ -104,7 +108,10 @@ local M = {
         pattern = '\\definecolor{[%w_]+}{RGB}{%s*(%d+)%s*,%s*(%d+)%s*,%s*(%d+)%s*}',
         to_vim_color = function(self, str)
             local R, G, B = str:match(self.pattern)
-            return ('#%02x%02x%02x'):format(R, G, B)
+            return ('#%02x%02x%02x'):format(
+                clamp_8bit_channel(tonumber(R)),
+                clamp_8bit_channel(tonumber(G)),
+                clamp_8bit_channel(tonumber(B)))
         end,
     },
     {
