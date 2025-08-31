@@ -15,9 +15,16 @@ local display_style_cycler = {
 --- Sets the plugin configuration.
 --- @param opts table plugin configuration
 function M.load_config(opts)
-    M.config = vim.tbl_deep_extend('force', require'pigmentor.config', opts)
+    M.config = require'pigmentor.config'
+    M.update_config(opts)
+end
 
-    M.internal = { }
+--- Updates the plugin configuration with overrides of \p opts
+--- @param opts table plugin configuration overrides
+function M.update_config(opts)
+    M.config = vim.tbl_deep_extend('force', M.config, opts)
+
+    M.internal = M.internal or { }
     M.internal.buftypes = { }
     for _, buftype in ipairs(M.config.buftypes) do
         M.internal.buftypes[buftype] = true
