@@ -17,13 +17,15 @@ function M.compose_extmark_virt_text(data, hl_group, invert)
 end
 
 function M.create_highlight_group(buf, match, hl_number)
+    local matcher = matchers[match.idx]
+    local vim_color = matcher:to_vim_color(match.text)
+    if vim_color == nil then return nil end  -- Failed to compute color
+
     -- Get normal highlight group.
     local hl_normal = vim.api.nvim_get_hl(0, { name = 'Normal' })
 
     -- Create new highlight group.  The name includes buffer ID and highligh group counter for scoping.
     local hl_group = ('PigmentorHiBuf%dColor%d'):format(buf, hl_number)
-    local matcher = matchers[match.idx]
-    local vim_color = matcher:to_vim_color(match.text)
     vim.api.nvim_set_hl(0, hl_group, {
         fg = vim_color, bg = hl_normal.bg,
     })
@@ -173,7 +175,11 @@ function M.redraw_buffer(pigmentor, buf, matches)
         })
 
         if #ext_marks == 0 then
+            -- Create the highlight group and validate whether it was successful.
             local hl_group = M.create_highlight_group(buf, match, hl_counter)
+            if hl_group == nil then goto continue end
+
+            -- Insert extmarks.
             if pigmentor.config.display.style == 'inline' then
                 M.place_inline_extmark(pigmentor, buf, match, hl_group)
             elseif pigmentor.config.display.style == 'highlight' then
@@ -183,6 +189,8 @@ function M.redraw_buffer(pigmentor, buf, matches)
             end
             hl_counter = hl_counter + 1
         end
+
+        ::continue::
     end
 end
 
