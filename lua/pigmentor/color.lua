@@ -6,6 +6,28 @@ local max = math.max
 
 local utils = require'pigmentor.utils'
 
+function M.clamp_8bit_channel(value)
+    return utils.clamp(value, 0, 255)
+end
+
+--- Convert RBG channel relative ratio to absolute value.
+--- @param ratio number Color relative value ∈ [0; 1]
+--- @return integer value Color absolute value ∈ [0; 255]
+function M.channel_rel_to_abs(ratio)
+    return M.clamp_8bit_channel(utils.round(ratio * 255))
+end
+
+--- Convert relative RGB [0; 1]³ to absolute RGB [0; 255]³.
+--- @param r number Color red channel ∈ [0; 1]
+--- @param g number Color green channel ∈ [0; 1]
+--- @param b number Color blue channel ∈ [0; 1]
+--- @return integer red Color red channel ∈ [0; 255]
+--- @return integer green Color green channel ∈ [0; 255]
+--- @return integer blue Color blue channel ∈ [0; 255]
+function M.rgb_rel_to_abs(r, g, b)
+    return M.channel_rel_to_abs(r), M.channel_rel_to_abs(g), M.channel_rel_to_abs(b)
+end
+
 --- Convert HSL to RGB.
 --- @param hue number Color hue in degrees ∈ [0°; 360°)
 --- @param saturation number Color saturation ∈ [0; 1]

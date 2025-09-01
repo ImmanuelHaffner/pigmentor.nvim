@@ -2,26 +2,21 @@ local color = require'pigmentor.color'
 local decimal = '%d*%.?%d*'
 local utils = require'pigmentor.utils'
 
-local function clamp_8bit_channel(value)
-    return utils.clamp(value, 0, 255)
+local function parse_rgb(str, pattern)
+    local r, g, b = str:match(pattern)
+    r, g, b = utils.tonumbers(r, g, b)
+    if utils.any_nil(r, g, b) then return nil end
+    local R, G, B = color.rgb_rel_to_abs(r, g, b)
+    return ('#%02x%02x%02x'):format(R, G, B)
 end
 
---- Convert RBG channel relative ratio to absolute value.
---- @param ratio number Color relative value ∈ [0; 1]
---- @return integer value Color absolute value ∈ [0; 255]
-local function channel_rel_to_abs(ratio)
-    return clamp_8bit_channel(utils.round(ratio * 255))
-end
-
---- Convert relative RGB [0; 1]³ to absolute RGB [0; 255]³.
---- @param r number Color red channel ∈ [0; 1]
---- @param g number Color green channel ∈ [0; 1]
---- @param b number Color blue channel ∈ [0; 1]
---- @return integer red Color red channel ∈ [0; 255]
---- @return integer green Color green channel ∈ [0; 255]
---- @return integer blue Color blue channel ∈ [0; 255]
-local function rgb_rel_to_abs(r, g, b)
-    return channel_rel_to_abs(r), channel_rel_to_abs(g), channel_rel_to_abs(b)
+local function parse_hsl(str, pattern)
+    local h, s, l = str:match(pattern)
+    h, s, l = utils.tonumbers(h, s, l)
+    if utils.any_nil(h, s, l) then return nil end
+    local r, g, b = color.hsl_to_rgb(h, s, l)
+    local R, G, B = color.rgb_rel_to_abs(r, g, b)
+    return ('#%02x%02x%02x'):format(R, G, B)
 end
 
 -- Array of known color formats.
@@ -61,9 +56,7 @@ local M = {
                            '(' .. decimal .. ')%s+' ..
                            '(' .. decimal .. ')%s*%)',
         to_vim_color = function(self, str)
-            local r, g, b = str:match(self.pattern)
-            local R, G, B = rgb_rel_to_abs(r, g, b)
-            return ('#%02x%02x%02x'):format(R, G, B)
+            return parse_rgb(str, self.pattern)
         end,
     },
     {
@@ -74,9 +67,7 @@ local M = {
                            '(' .. decimal .. ')%s*,%s*' ..
                            '(' .. decimal .. ')%s*%)',
         to_vim_color = function(self, str)
-            local r, g, b = str:match(self.pattern)
-            local R, G, B = rgb_rel_to_abs(r, g, b)
-            return ('#%02x%02x%02x'):format(R, G, B)
+            return parse_rgb(str, self.pattern)
         end,
     },
     {
@@ -86,9 +77,7 @@ local M = {
                           '(' .. decimal .. ')%s+' ..
                           '(' .. decimal .. ')%s*%)',
         to_vim_color = function(self, str)
-            local r, g, b = str:match(self.pattern)
-            local R, G, B = rgb_rel_to_abs(r, g, b)
-            return ('#%02x%02x%02x'):format(R, G, B)
+            return parse_rgb(str, self.pattern)
         end,
     },
     {
@@ -98,35 +87,27 @@ local M = {
                           '(' .. decimal .. ')%s*,%s*' ..
                           '(' .. decimal .. ')%s*%)',
         to_vim_color = function(self, str)
-            local r, g, b = str:match(self.pattern)
-            local R, G, B = rgb_rel_to_abs(r, g, b)
-            return ('#%02x%02x%02x'):format(R, G, B)
+            return parse_rgb(str, self.pattern)
         end,
     },
     {
         -- CSS HSL
         kind = 'css_hsl',
-        pattern = 'hsl(a?)%(%s*(' .. decimal .. ')%s+' ..
-                          '(' .. decimal .. ')%s+' ..
-                          '(' .. decimal .. ')%s*%)',
+        pattern = 'hsla?%(%s*(' .. --[[hue]]        decimal .. ')%s+' ..
+                            '(' .. --[[saturation]] decimal .. ')%s+' ..
+                            '(' .. --[[lightness]]  decimal .. ')%s*%)',
         to_vim_color = function(self, str)
-            local _, h, s, l = str:match(self.pattern)
-            local r, g, b = color.hsl_to_rgb(utils.tonumbers(h, s, l))
-            local R, G, B = rgb_rel_to_abs(r, g, b)
-            return ('#%02x%02x%02x'):format(R, G, B)
+            return parse_hsl(str, self.pattern)
         end,
     },
     {
         -- CSS HSL (legacy)
         kind = 'css_hsl',
-        pattern = 'hsl(a?)%(%s*(' .. decimal .. ')%s*,%s*' ..
-                              '(' .. decimal .. ')%s*,%s*' ..
-                              '(' .. decimal .. ')%s*%)',
+        pattern = 'hsla?%(%s*(' .. --[[hue]]        decimal .. ')%s*,%s*' ..
+                            '(' .. --[[saturation]] decimal .. ')%s*,%s*' ..
+                            '(' .. --[[lightness]]  decimal .. ')%s*%)',
         to_vim_color = function(self, str)
-            local _, h, s, l = str:match(self.pattern)
-            local r, g, b = color.hsl_to_rgb(utils.tonumbers(h, s, l))
-            local R, G, B = rgb_rel_to_abs(r, g, b)
-            return ('#%02x%02x%02x'):format(R, G, B)
+            return parse_hsl(str, self.pattern)
         end,
     },
     {
@@ -135,10 +116,12 @@ local M = {
         pattern = '\\definecolor{[%w_]+}{RGB}{%s*(%d+)%s*,%s*(%d+)%s*,%s*(%d+)%s*}',
         to_vim_color = function(self, str)
             local R, G, B = str:match(self.pattern)
+            R, G, B = utils.tonumbers(R, G, B)
+            if utils.any_nil(R, G, B) then return nil end
             return ('#%02x%02x%02x'):format(
-                clamp_8bit_channel(tonumber(R)),
-                clamp_8bit_channel(tonumber(G)),
-                clamp_8bit_channel(tonumber(B)))
+                color.clamp_8bit_channel(R),
+                color.clamp_8bit_channel(G),
+                color.clamp_8bit_channel(B))
         end,
     },
     {
@@ -150,7 +133,9 @@ local M = {
                   '%s*(' .. decimal .. ')%s*}',
         to_vim_color = function(self, str)
             local r, g, b = str:match(self.pattern)
-            local R, G, B = rgb_rel_to_abs(r, g, b)
+            r, g, b = utils.tonumbers(r, g, b)
+            if utils.any_nil(r, g, b) then return nil end
+            local R, G, B = color.rgb_rel_to_abs(r, g, b)
             return ('#%02x%02x%02x'):format(R, G, B)
         end,
     },
