@@ -18,4 +18,24 @@ function M.get_mode_config(config, mode)
     return config.modes.n  -- fall back to normal mode
 end
 
+function M.round(n) return math.floor(n + .5) end
+
+function M.clamp(value, min, max)
+    if value < min then return min end
+    if value > max then return max end
+    return value
+end
+
+--- Convert a pack of strings to a pack of numbers.
+--- @param ... string
+--- @return number ...
+function M.tonumbers(...)
+    local args = { ... }
+    local t = { }
+    for _, v in ipairs(args) do
+        t[#t + 1] = tonumber(v)
+    end
+    return table.unpack(t)
+end
+
 return M
