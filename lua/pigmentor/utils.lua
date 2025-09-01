@@ -38,4 +38,16 @@ function M.tonumbers(...)
     return table.unpack(t)
 end
 
+--- Checks whether any argument is `nil`.
+--- @param ... unknown
+--- @return boolean any_nil whether any of the arguments is `nil`
+function M.any_nil(...)
+    for i = 1, select('#', ...) do
+        if select(i, ...) == nil then
+            return true
+        end
+    end
+    return false
+end
+
 return M
