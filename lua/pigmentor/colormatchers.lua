@@ -19,6 +19,17 @@ local function parse_hsl(str, pattern)
     return ('#%02x%02x%02x'):format(R, G, B)
 end
 
+local function parse_hsl_deg(str, pattern)
+    local h, s, l = str:match(pattern)
+    h, s, l = utils.tonumbers(h, s, l)
+    if utils.any_nil(h, s, l) then return nil end
+    s = s / 100  -- convert from percentage '%'
+    l = l / 100  -- convert from percentage '%'
+    local r, g, b = color.hsl_to_rgb(h, s, l)
+    local R, G, B = color.rgb_rel_to_abs(r, g, b)
+    return ('#%02x%02x%02x'):format(R, G, B)
+end
+
 -- Array of known color formats.
 local M = {
     {
@@ -101,6 +112,16 @@ local M = {
         end,
     },
     {
+        -- CSS HSL deg
+        kind = 'css_hsl',
+        pattern = 'hsla?%(%s*(' .. --[[hue]]        decimal .. ')deg%s+' ..
+                            '(' .. --[[saturation]] decimal .. ')%%%s+' ..
+                            '(' .. --[[lightness]]  decimal .. ')%%%s*%)',
+        to_vim_color = function(self, str)
+            return parse_hsl_deg(str, self.pattern)
+        end,
+    },
+    {
         -- CSS HSL (legacy)
         kind = 'css_hsl',
         pattern = 'hsla?%(%s*(' .. --[[hue]]        decimal .. ')%s*,%s*' ..
@@ -108,6 +129,16 @@ local M = {
                             '(' .. --[[lightness]]  decimal .. ')%s*%)',
         to_vim_color = function(self, str)
             return parse_hsl(str, self.pattern)
+        end,
+    },
+    {
+        -- CSS HSL deg (legacy)
+        kind = 'css_hsl',
+        pattern = 'hsla?%(%s*(' .. --[[hue]]        decimal .. ')deg%s*,%s*' ..
+                            '(' .. --[[saturation]] decimal .. ')%%%s*,%s*' ..
+                            '(' .. --[[lightness]]  decimal .. ')%%%s*%)',
+        to_vim_color = function(self, str)
+            return parse_hsl_deg(str, self.pattern)
         end,
     },
     {
