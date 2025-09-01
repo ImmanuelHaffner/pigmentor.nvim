@@ -37,9 +37,9 @@ end
 --- @return number blue Color blue channel ∈ [0; 1]
 --- @see https://en.wikipedia.org/wiki/HSL_and_HSV#HSL_to_RGB_alternative
 function M.hsl_to_rgb(hue, saturation, lightness)
-    assert(0 <= hue and hue < 360, "Hue outside bounds [0; 360)")
-    assert(0 <= saturation and saturation <= 1, "Saturation outside bounds [0; 1]")
-    assert(0 <= lightness and lightness <= 1, "Lightness outside bounds [0; 1]")
+    if (hue < 0 or hue >= 360) then hue = 0 end
+    saturation = utils.clamp(saturation, 0, 1)
+    lightness = utils.clamp(lightness, 0, 1)
 
     local function f(n)
         local k = (n + hue / 30) % 12
@@ -59,9 +59,9 @@ end
 --- @return number blue Color blue channel ∈ [0; 1]
 --- @see https://en.wikipedia.org/wiki/HSL_and_HSV#HSL_to_RGB_alternative
 function M.hsv_to_rgb(hue, saturation, value)
-    assert(0 <= hue and hue < 360, "Hue outside bounds [0; 360)")
-    assert(0 <= saturation and saturation <= 1, "Saturation outside bounds [0; 1]")
-    assert(0 <= value and value <= 1, "Value outside bounds [0; 1]")
+    if (hue < 0 or hue >= 360) then hue = 0 end
+    saturation = utils.clamp(saturation, 0, 1)
+    value = utils.clamp(value, 0, 1)
 
     local function f(n)
         local k = (n + hue / 60) % 6
