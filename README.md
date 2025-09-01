@@ -27,6 +27,7 @@
 
 - **Hexadecimal**: `#FF0000`, `#F00`, `#FF0000AA`
 - **CSS RGB/RGBA**: `rgb(255, 0, 0)`, `rgba(255, 0, 0, 0.5)`
+- **CSS HSL/HSLA**: `hsl(200, 1, .6)`, `hsla(200deg, 100%, 60.0%)`
 - **LaTeX Colors**: `\definecolor{red}{RGB}{255,0,0}`, `\definecolor{blue}{HTML}{0000FF}`
 
 ### Examples
@@ -486,7 +487,6 @@ The following features are planned for future releases:
 
 - 📚 **Vim Help Documentation**: Comprehensive help documentation accessible via `:help pigmentor`
 - 🎨 **Extended Color Format Support**:
-  - **HSL/HLS**: `hsl(0, 100%, 50%)`, `hsla(0, 100%, 50%, 0.5)`
   - **HSV/HSB**: `hsv(0, 100%, 100%)`, `hsva(0, 100%, 100%, 0.5)`
 - ⚡ **Per-Channel Color Manipulation**: Increment/decrement individual color channels using `<Ctrl-a>` and `<Ctrl-x>` respectively
 
