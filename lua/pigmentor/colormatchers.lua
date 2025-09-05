@@ -144,7 +144,7 @@ local M = {
     {
         -- LaTeX definecolor RGB
         kind = 'latex_definecolor',
-        pattern = '\\definecolor{[%w_]+}{RGB}{%s*(%d+)%s*,%s*(%d+)%s*,%s*(%d+)%s*}',
+        pattern = '\\definecolor%s*{[%w_]+}%s*{RGB}%s*{%s*(%d+)%s*,%s*(%d+)%s*,%s*(%d+)%s*}',
         to_vim_color = function(self, str)
             local R, G, B = str:match(self.pattern)
             R, G, B = utils.tonumbers(R, G, B)
@@ -158,7 +158,7 @@ local M = {
     {
         -- LaTeX definecolor rgb
         kind = 'latex_definecolor',
-        pattern = '\\definecolor{[%w_]+}{rgb}{' ..
+        pattern = '\\definecolor%s*{[%w_]+}%s*{rgb}%s*{' ..
                   '%s*(' .. decimal .. ')%s*,' ..
                   '%s*(' .. decimal .. ')%s*,' ..
                   '%s*(' .. decimal .. ')%s*}',
@@ -173,7 +173,7 @@ local M = {
     {
         -- LaTeX definecolor HTML
         kind = 'latex_definecolor',
-        pattern = '\\definecolor{[%w_]+}{HTML}{(' .. ('%x'):rep(6) .. ')}',
+        pattern = '\\definecolor%s*{[%w_]+}%s*{HTML}%s*{(' .. ('%x'):rep(6) .. ')}',
         to_vim_color = function(self, str)
             local hex = str:match(self.pattern)
             return '#' .. hex
