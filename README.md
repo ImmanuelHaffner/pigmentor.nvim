@@ -92,13 +92,14 @@ Pigmentor comes with sensible defaults, but you can customize it to your needs.
 ```lua
 require'pigmentor'.setup{
   enabled = true,                   -- whether the plugin is active
-  buftypes = {                      -- which buftypes to support
+  buftypes = {                      -- which buftypes to support (allowlist)
     '',                             -- normal files
     'help',
     'nofile',
     'nowrite',
     'quickfix',
   },
+  ignore_filetypes = {},            -- filetypes to never highlight (blocklist)
   display = {
     inactive = true,                -- show in inactive windows
     style = 'inline',               -- one of 'inline', 'highlight', 'hybrid'
@@ -318,6 +319,18 @@ pigmentor.refresh_buffer(vim.api.nvim_get_current_buf())
 
 -- Refresh all visible buffers
 pigmentor.refresh_visible_buffers()
+
+-- Per-buffer control
+pigmentor.disable_buf()                             -- disable for current buffer
+pigmentor.disable_buf(bufnr)                        -- disable for a specific buffer
+pigmentor.enable_buf(bufnr)                         -- re-enable and refresh
+pigmentor.toggle_buf(bufnr)                         -- toggle for a buffer
+
+-- Check if a buffer is active
+pigmentor.is_buf_active(bufnr)                      -- false if globally disabled,
+                                                    -- buftype not in allowlist,
+                                                    -- filetype in blocklist,
+                                                    -- or individually disabled
 ```
 
 ### Keymaps

@@ -25,8 +25,7 @@ end
 --- @param buf integer
 --- @return table the colors found, as a table of tables
 function M.find_colors(pigmentor, buf)
-    if not pigmentor.config.enabled then return {} end
-    if not pigmentor.internal.buftypes[vim.bo[buf].buftype] then return {} end  -- buftype not enabled
+    if not pigmentor.is_buf_active(buf) then return {} end
 
     -- Get the config settings for the current mode.
     local mode_config = utils.get_mode_config(pigmentor.config, vim.api.nvim_get_mode().mode)

@@ -28,6 +28,14 @@ function M.setup(pigmentor)
             pigmentor.refresh_visible_buffers()
         end,
     })
+
+    -- Clean up per-buffer state when a buffer is wiped.
+    vim.api.nvim_create_autocmd('BufWipeout', {
+        group = pigmentor.augroup,
+        callback = function(ev)
+            pigmentor.internal.buf_disabled[ev.buf] = nil
+        end,
+    })
 end
 
 return M

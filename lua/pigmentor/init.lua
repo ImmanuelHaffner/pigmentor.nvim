@@ -29,11 +29,61 @@ function M.update_config(opts)
     for _, buftype in ipairs(M.config.buftypes) do
         M.internal.buftypes[buftype] = true
     end
+    M.internal.ignore_filetypes = { }
+    for _, ft in ipairs(M.config.ignore_filetypes) do
+        M.internal.ignore_filetypes[ft] = true
+    end
+    M.internal.buf_disabled = M.internal.buf_disabled or { }
+end
+
+--- Check whether pigmentor is active for the given buffer.
+--- Returns false when the plugin is globally disabled, the buffer's buftype
+--- is not in the allowlist, the buffer's filetype is in the blocklist, or
+--- the buffer has been individually disabled via `disable_buf()`.
+--- @param buf integer buffer ID
+--- @return boolean
+function M.is_buf_active(buf)
+    if not M.config.enabled then return false end
+    if not M.internal.buftypes[vim.bo[buf].buftype] then return false end
+    if M.internal.ignore_filetypes[vim.bo[buf].filetype] then return false end
+    if M.internal.buf_disabled[buf] then return false end
+    return true
+end
+
+--- Disable pigmentor for a single buffer and clear its extmarks.
+--- @param buf? integer buffer ID (defaults to current buffer)
+function M.disable_buf(buf)
+    buf = buf or vim.api.nvim_get_current_buf()
+    M.internal.buf_disabled[buf] = true
+    vim.api.nvim_buf_clear_namespace(buf, M.ns, 0, -1)
+end
+
+--- Re-enable pigmentor for a single buffer and refresh it.
+--- @param buf? integer buffer ID (defaults to current buffer)
+function M.enable_buf(buf)
+    buf = buf or vim.api.nvim_get_current_buf()
+    M.internal.buf_disabled[buf] = nil
+    M.refresh_buffer(buf)
+end
+
+--- Toggle pigmentor for a single buffer.
+--- @param buf? integer buffer ID (defaults to current buffer)
+function M.toggle_buf(buf)
+    buf = buf or vim.api.nvim_get_current_buf()
+    if M.internal.buf_disabled[buf] then
+        M.enable_buf(buf)
+    else
+        M.disable_buf(buf)
+    end
 end
 
 --- Refreshes a single buffer.
 --- @param buf integer buffer ID
 function M.refresh_buffer(buf)
+    if not M.is_buf_active(buf) then
+        return
+    end
+
     -- Get list of matches.
     local matches = finder.find_colors(M, buf)
 

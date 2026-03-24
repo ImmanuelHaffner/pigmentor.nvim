@@ -1,12 +1,13 @@
 return {
     enabled = true,                     -- whether the plugin is active
-    buftypes = {                        -- which buftypes to support
+    buftypes = {                        -- which buftypes to support (allowlist)
         '',                             -- normal files
         'help',
         'nofile',
         'nowrite',
         'quickfix',
     },
+    ignore_filetypes = {},              -- filetypes to never highlight (blocklist)
     display = {
         inactive = true,                -- show in inactive windows
         style = 'inline',               -- one of inline, highlight, hybrid
