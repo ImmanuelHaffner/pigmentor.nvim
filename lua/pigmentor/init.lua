@@ -80,6 +80,13 @@ end
 --- Refreshes a single buffer.
 --- @param buf integer buffer ID
 function M.refresh_buffer(buf)
+    -- Always clear stale extmarks first so that a transition from "active" to
+    -- "inactive" (plugin disabled, filetype now in blocklist, buffer disabled
+    -- via disable_buf(), …) actually removes the highlights instead of leaving
+    -- them lingering. `ui.redraw_buffer` will clear again on the active path;
+    -- that's a cheap no-op.
+    vim.api.nvim_buf_clear_namespace(buf, M.ns, 0, -1)
+
     if not M.is_buf_active(buf) then
         return
     end
