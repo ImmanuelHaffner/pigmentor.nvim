@@ -143,6 +143,14 @@ function M.setup(opts)
     require'pigmentor.autocmd'.setup(M)
     -- Create user commands
     require'pigmentor.user_commands'.setup(M)
+
+    -- If setup runs *after* VimEnter (e.g. lazy.nvim loads the plugin at
+    -- VimEnter, by which point our VimEnter autocmd will never fire), kick off
+    -- an initial render so visible buffers are highlighted immediately instead
+    -- of requiring the user to move the cursor or switch tabs first.
+    if vim.v.vim_did_enter == 1 then
+        vim.schedule(function() M.refresh_visible_buffers() end)
+    end
 end
 
 return M
