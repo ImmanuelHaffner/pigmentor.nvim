@@ -5,18 +5,24 @@ local M = { }
 function M.setup(pigmentor)
     pigmentor.augroup = vim.api.nvim_create_augroup('pigmentor.nvim', { clear = true })
 
-    -- When to refresh a single buffer.
-    vim.api.nvim_create_autocmd({ 'CursorMoved', 'ModeChanged', 'BufReadPost' }, {
+    -- When to refresh every window showing a buffer.  'FileType' and 'buftype' decide whether a buffer is
+    -- highlighted at all, and both are set after `BufReadPost`.
+    vim.api.nvim_create_autocmd({ 'CursorMoved', 'ModeChanged', 'BufReadPost', 'BufWinEnter', 'FileType' }, {
         group = pigmentor.augroup,
         callback = function(ev) pigmentor.refresh_buffer(ev.buf) end,
     })
+    vim.api.nvim_create_autocmd('OptionSet', {
+        group = pigmentor.augroup,
+        pattern = 'buftype',
+        callback = function() pigmentor.refresh_buffer() end,
+    })
 
-    -- When to clear extmarks and highlight groups in a buffer.
+    -- When to clear the extmarks of the window being left.
     vim.api.nvim_create_autocmd({ 'WinLeave' }, {
         group = pigmentor.augroup,
-        callback = function(ev)
+        callback = function()
             if not pigmentor.config.display.inactive then
-                vim.api.nvim_buf_clear_namespace(ev.buf, pigmentor.ns, 0, -1)
+                pigmentor.clear_window(vim.api.nvim_get_current_win())
             end
         end
     })
@@ -24,16 +30,17 @@ function M.setup(pigmentor)
     -- When to refresh all visible buffers.
     vim.api.nvim_create_autocmd({ 'VimEnter', 'SessionLoadPost', 'TabEnter' }, {
         group = pigmentor.augroup,
-        callback = function(ev)
+        callback = function()
             pigmentor.refresh_visible_buffers()
         end,
     })
 
-    -- Clean up per-buffer state when a buffer is wiped.
-    vim.api.nvim_create_autocmd('BufWipeout', {
+    -- Release a closed window's namespace.
+    vim.api.nvim_create_autocmd('WinClosed', {
         group = pigmentor.augroup,
         callback = function(ev)
-            pigmentor.internal.buf_disabled[ev.buf] = nil
+            local win = tonumber(ev.match)
+            if win then pigmentor.release_window(win) end
         end,
     })
 end

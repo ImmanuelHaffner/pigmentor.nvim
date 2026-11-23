@@ -19,47 +19,22 @@ local function find_strict(str, pattern, col)
     return nil, nil
 end
 
---- Find all colors in the given buffer.  It is important to do this per buffer, not per window.  We later clear all
---- extmarks in the Pigmentor namespace in this buffer before redrawing.
+--- Find all colors visible in the given window.
 --- @param pigmentor table
---- @param buf integer
---- @return table the colors found, as a table of tables
-function M.find_colors(pigmentor, buf)
-    if not pigmentor.is_buf_active(buf) then return {} end
-
+--- @param win integer window ID
+--- @return table the colors found, as a list of tables
+function M.find_colors(pigmentor, win)
     -- Get the config settings for the current mode.
     local mode_config = utils.get_mode_config(pigmentor.config, vim.api.nvim_get_mode().mode)
 
-    -- Check whether buffer is active and we want to find colors.
-    local is_active = buf == vim.api.nvim_get_current_buf()
-    if not pigmentor.config.display.inactive and not is_active then
-        return {}  -- don't search for colors in inactive buffer
-    end
-
-    -- Get visible windows.
-    local curr_tab_id = vim.api.nvim_get_current_tabpage()
-    local wins = vim.api.nvim_tabpage_list_wins(curr_tab_id)
-
-    local matches = { }
-    for _, win in ipairs(wins) do
-        if buf == vim.api.nvim_win_get_buf(win) then  -- found a window showing the buffer
-            local wininfo = vim.fn.getwininfo(win)[1]
-            local rect = {
-                row_first = wininfo.topline,                                        -- 1-indexed
-                row_last = wininfo.botline,                                         -- 1-indexed
-                col_first = wininfo.leftcol and wininfo.leftcol + 1 or 1,           -- 1-indexed
-            }
-            rect.col_last = rect.col_first + wininfo.width - wininfo.textoff        -- 1-indexed
-            local new_matches = M.find_colors_in_range(buf, win, rect, mode_config)
-            for k, v in pairs(new_matches) do
-                if matches[k] == nil then
-                    matches[k] = v
-                end
-            end
-        end
-    end
-
-    return matches
+    local wininfo = vim.fn.getwininfo(win)[1]
+    local rect = {
+        row_first = wininfo.topline,                                        -- 1-indexed
+        row_last = wininfo.botline,                                         -- 1-indexed
+        col_first = wininfo.leftcol and wininfo.leftcol + 1 or 1,           -- 1-indexed
+    }
+    rect.col_last = rect.col_first + wininfo.width - wininfo.textoff        -- 1-indexed
+    return M.find_colors_in_range(vim.api.nvim_win_get_buf(win), win, rect, mode_config)
 end
 
 function M.find_colors_in_range(buf, win, rect, mode_config)
@@ -99,7 +74,7 @@ function M.find_colors_in_range(buf, win, rect, mode_config)
                 end
 
                 local color_str = string.sub(line, s, e)
-                matches[{line_num, s}] = {  -- uniquely identify matches by their location, avoiding duplicates
+                matches[#matches + 1] = {
                     text = color_str,
                     line = line_num,
                     s = s,

@@ -91,15 +91,14 @@ Pigmentor comes with sensible defaults, but you can customize it to your needs.
 
 ```lua
 require'pigmentor'.setup{
-  enabled = true,                   -- whether the plugin is active
-  buftypes = {                      -- which buftypes to support (allowlist)
-    '',                             -- normal files
-    'help',
-    'nofile',
-    'nowrite',
-    'quickfix',
+  enabled = true,                   -- master switch; when false, nothing is highlighted anywhere
+  default = true,                   -- whether to highlight buffers no filetype or buftype rule matches
+  filetypes = {},                   -- per-filetype rules, e.g. { css = true, markdown = false }
+  buftypes = {                      -- per-buftype rules, consulted when no filetype rule matches
+    acwrite = false,
+    prompt = false,
+    terminal = false,
   },
-  ignore_filetypes = {},            -- filetypes to never highlight (blocklist)
   display = {
     inactive = true,                -- show in inactive windows
     style = 'inline',               -- one of 'inline', 'highlight', 'hybrid'
@@ -139,6 +138,29 @@ require'pigmentor'.setup{
   },
 }
 ```
+
+### Where to Highlight
+
+Whether a window shows highlights is decided by the first of these that is set:
+
+1. `enabled`, the master switch: when `false`, nothing is highlighted.
+2. The window override `vim.w.pigmentor_enabled`, set by `enable_win()`, `disable_win()`, `toggle_win()`.
+3. The buffer override `vim.b.pigmentor_enabled`, set by `enable_buf()`, `disable_buf()`, `toggle_buf()`.
+4. The rule for the buffer's `'filetype'` in `filetypes`.
+5. The rule for the buffer's `'buftype'` in `buftypes`.
+6. `default`.
+
+Because a window override wins over its buffer, a buffer split into two windows can be highlighted in one and plain in the other.
+To highlight only files that are about colors:
+
+```lua
+require'pigmentor'.setup{
+  default = false,
+  filetypes = { css = true, scss = true, html = true, tex = true },
+}
+```
+
+The former list forms are still accepted: `buftypes = { '', 'help' }` allows only the listed buftypes, and `ignore_filetypes = { 'markdown' }` is shorthand for `filetypes = { markdown = false }`.
 
 ### Display Styles
 
@@ -320,18 +342,24 @@ pigmentor.refresh_buffer(vim.api.nvim_get_current_buf())
 -- Refresh all visible buffers
 pigmentor.refresh_visible_buffers()
 
--- Per-buffer control
-pigmentor.disable_buf()                             -- disable for current buffer
-pigmentor.disable_buf(bufnr)                        -- disable for a specific buffer
-pigmentor.enable_buf(bufnr)                         -- re-enable and refresh
-pigmentor.toggle_buf(bufnr)                         -- toggle for a buffer
+-- Per-buffer control (defaults to the current buffer); each returns whether the buffer is now highlighted
+pigmentor.enable_buf(bufnr)
+pigmentor.disable_buf(bufnr)
+pigmentor.toggle_buf(bufnr)
+pigmentor.reset_buf(bufnr)                          -- drop the override, follow the rules again
 
--- Check if a buffer is active
-pigmentor.is_buf_active(bufnr)                      -- false if globally disabled,
-                                                    -- buftype not in allowlist,
-                                                    -- filetype in blocklist,
-                                                    -- or individually disabled
+-- Per-window control (defaults to the current window), overriding the window's buffer
+pigmentor.enable_win(winid)
+pigmentor.disable_win(winid)
+pigmentor.toggle_win(winid)
+pigmentor.reset_win(winid)
+
+-- Query the resolved state
+pigmentor.is_buf_active(bufnr)
+pigmentor.is_win_active(winid)
 ```
+
+Each function has a user command: `:PigmentorToggle`, `:PigmentorToggleBuf`, `:PigmentorToggleWin`, and likewise for `Enable`, `Disable`, and (per buffer and window) `Reset`.
 
 ### Keymaps
 

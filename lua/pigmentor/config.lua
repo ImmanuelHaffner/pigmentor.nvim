@@ -1,13 +1,12 @@
 return {
-    enabled = true,                     -- whether the plugin is active
-    buftypes = {                        -- which buftypes to support (allowlist)
-        '',                             -- normal files
-        'help',
-        'nofile',
-        'nowrite',
-        'quickfix',
+    enabled = true,                     -- master switch; when false, nothing is highlighted anywhere
+    default = true,                     -- whether to highlight a buffer that no filetype or buftype rule matches
+    filetypes = {},                     -- per-filetype rules, e.g. `{ css = true, markdown = false }`
+    buftypes = {                        -- per-buftype rules, consulted when no filetype rule matches
+        acwrite = false,
+        prompt = false,
+        terminal = false,
     },
-    ignore_filetypes = {},              -- filetypes to never highlight (blocklist)
     display = {
         inactive = true,                -- show in inactive windows
         style = 'inline',               -- one of inline, highlight, hybrid
@@ -39,7 +38,7 @@ return {
             line = false,
             visible = true,
         },
-        [{ 'v', 'V', '' }] = {
+        [{ 'v', 'V', '\x16' }] = {
             cursor = false,
             line = false,
             visible = false,
